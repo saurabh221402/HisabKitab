@@ -7,10 +7,10 @@ Status: Working hypotheses; requires validation with the business owner and acco
 
 1. HisabKitab should be an **operations-led accounting system**, not merely a collection of forms and not a general-purpose accounting package.
 2. The core record should separate **deal, lot/load, weighment, settlement, invoice, payment, and ledger posting**.
-3. The most consequential unknown is whether the business is always a principal trader or sometimes a commission agent.
+3. V1 should model the confirmed principal-trading flow. Full commission-agent accounting remains deferred until supported by a real transaction example.
 4. Stock and profit cannot be correct until ownership transfer, unit conversion, shortage, quality deductions, expenses, and cost allocation are defined.
 5. Users should enter understandable actions such as “pay seller” and “receive from buyer”; the system can post debits and credits internally.
-6. A small **modular monolith** backed by PostgreSQL is the best likely V1 architecture. Microservices and separate mobile apps would add cost without solving the first business problem.
+6. A small **modular monolith** backed initially by Supabase-hosted PostgreSQL is the best likely V1 architecture. Microservices and separate mobile apps would add cost without solving the first business problem.
 7. Compliance fields should exist from the beginning, but government API integrations should follow a stable internal workflow and professional tax validation.
 
 ### Known operating context
@@ -18,9 +18,12 @@ Status: Working hypotheses; requires validation with the business owner and acco
 - Home location: Bhadohi district, Uttar Pradesh.
 - Outbound trade: intra-state and interstate, including Bihar, Madhya Pradesh, Gujarat, and Maharashtra.
 - Fulfilment: both warehoused stock and direct seller-to-buyer dispatch.
-- Business roles: both principal trading and another-party/commission contexts were reported; role-per-deal must be made explicit.
-- Business names: Sai Traders and Guru Dev Traders; legal/GST relationship is still unknown.
+- Business role: V1 models principal trading—buy from farmers/traders, aggregate or transport, then sell to mills/larger firms. Brokers act as intermediaries in this flow.
+- Business names: Sai Traders and Guru Dev Traders are separate GST-registered firms associated with Papa and Uncle; future firms may be added.
 - Current records: a significant cash segment is reportedly undocumented. The product will support recorded cash transactions but no off-books mode.
+- Reported scale: more than ₹50 crore annual revenue, around ₹50 lakh daily money movement, and around 100 metric tonnes of daily purchase/sale volume.
+- Current operating knowledge: core calculations and control are concentrated in the owner’s father and uncle.
+- Adoption requirement: retain paper during a confidence-building parallel run; do not force an immediate migration.
 
 ## 2. Market understanding
 
@@ -34,7 +37,7 @@ Agricultural trade software commonly serves at least three models:
 | Commission agent / arhtiya | Usually no | commission and service charges | farmer lot, auction, buyer settlement, patti, commission |
 | Hybrid | Sometimes | margin plus commission | both, with explicit role per deal |
 
-HisabKitab currently appears to target the first model, but the schema should record the business role on each deal if hybrid transactions exist. A commission transaction must not be treated as owned inventory or gross sales revenue by default.
+HisabKitab V1 targets the principal-trader model. The commission-agent and hybrid models are useful market context, but they should not add V1 complexity without a concrete transaction example. If that requirement emerges later, a commission transaction must not be treated as owned inventory or gross sales revenue by default.
 
 ### 2.2 Market workflow signals
 
@@ -70,6 +73,19 @@ HisabKitab should not try to win by having the longest feature list. Its advanta
 ### 2.4 External market data
 
 AGMARKNET publishes arrival and price information across commodities and APMC markets, and e-NAM gives traders access to market, quality, and price information. Market-rate display may become useful later, but it is not required to replace internal registers. It should remain informational and show source/time; it must never silently determine the contractual rate.
+
+### 2.5 What the reported scale means
+
+The reported 100 tonnes per day is not intrinsically a difficult software-throughput problem. The hard problem is correctness and continuity at high financial value:
+
+- a small calculation or allocation error can have a large rupee impact;
+- two-person knowledge concentration creates operational and succession risk;
+- paper makes aggregate exposure and trends slow to discover;
+- daily cash movement requires disciplined account/cash-box reconciliation;
+- one wrong entity, party, weight, rate, or payment allocation can contaminate several reports;
+- trust will be lost quickly if the digital result differs from the familiar parcha without an explanation.
+
+Therefore, prioritize traceability, calculation transparency, reconciliation, permissions, backups, and fast daily entry above exotic infrastructure or decorative analytics.
 
 ## 3. Proposed business lifecycle
 
@@ -233,12 +249,14 @@ The first example deducts Kanta/weight charge, plastic sack charge, Hamali, and 
 - Commission may be percentage, per weight, per bag, flat, tiered, or manually agreed.
 - It may be payable by seller, buyer, the business, or split.
 - Broker liability and payment are separate from the buyer/seller settlement.
+- In the confirmed V1 sale workflow, brokerage is paid by the business and calculated as `rate × actual sale weight in quintal`.
 - **Validate:** whether the business ever earns brokerage rather than paying it.
 
 ### BR-009 — Transport
 
 - A transporter may have many vehicles and drivers; a vehicle/driver relationship can change over time.
 - Each load records freight terms: prepaid, to-pay, included, recoverable, or borne by a named party.
+- The confirmed V1 transport calculation is `transport rate × actual sale weight in quintal`; the responsible payer remains a per-sale input.
 - Transporter bill, advance, final payable, and payment are separate.
 - Transit shortage/damage is recorded explicitly with responsibility and settlement effect.
 
@@ -324,7 +342,24 @@ Do not define profit as cash received minus cash paid.
 - Each transaction, account, document series, tax registration, journal, stock ownership record, and report belongs to a legal business entity.
 - Users may be authorized for multiple entities, but totals and balances are separate unless a consolidated report explicitly combines them.
 - Money or stock transferred between Sai Traders and Guru Dev Traders must be recorded symmetrically as an inter-entity transaction if they are legally separate.
-- **Validate:** whether the two names share PAN, GSTIN, bank accounts, ownership, and books.
+- Sai Traders and Guru Dev Traders are confirmed as separate GST-registered firms. Exact PAN, bank-account, ownership, and inter-firm behavior still require validation.
+- `Unassigned` is permitted only for a draft awaiting review. A posted transaction cannot use “no firm” as an off-books classification.
+
+### BR-021 — Simplified V1 money language
+
+- Papa’s paper convention is `DB` for money given to a supplier/person and `CR` for money received from a buyer/person.
+- The UI should show both the familiar label and plain meaning: `DB / Cash Out` and `CR / Cash In`.
+- Current cash is derived from opening cash plus cash in minus cash out.
+- Payments entered during purchase/sale must create or link the money-book movement automatically to prevent double entry.
+
+### BR-022 — Simplified V1 scope boundary
+
+- Warehouse/location tracking is deferred even though five warehouse locations exist; remarks may capture operational context initially.
+- Advanced buyer/seller weight differences, shortage liability, and quality formulas are future scope.
+- Charge entry is initially a simple label, amount, and basic borne-by classification. Detailed multi-party settlement can be added after validated examples.
+- Printer-specific support and charts are future scope.
+- Kanta parchi attachments are supported for purchase and sale.
+- Poor connectivity requires local draft preservation and visible synchronization status, but only server-confirmed records affect balances.
 
 ### BR-017 — Privacy and security
 
@@ -419,6 +454,46 @@ Do not define profit as cash received minus cash paid.
 - expense and preliminary gross-margin reports;
 - audit/exception report.
 
+### Operational dashboard
+
+The first dashboard should be a compact operational control surface derived from posted/reconciled records:
+
+- today’s purchased and sold weight and value;
+- today’s receipts, payments, and net money movement by cash/bank account;
+- cash expected versus physically confirmed;
+- current receivables and payables, including overdue amounts;
+- current stock by commodity/location;
+- unsettled deals, incomplete loads, unallocated payments, weight differences, and other exceptions;
+- short-period trends only after their source reports reconcile.
+
+Dashboard totals must link to their underlying records. Do not implement a metric whose definition and source cannot be explained.
+
+### Adoption and migration stages
+
+#### Stage A — digital shadow mode
+
+- Paper remains the operational reference.
+- Enter the same day’s transactions into HisabKitab.
+- Compare purchase/sale totals, money movement, party balances, and stock every day.
+- Log every mismatch by category and cause.
+- Adapt terminology, print layout, entry order, and formulas based on actual operator use.
+
+#### Stage B — trusted digital support
+
+- HisabKitab calculates and retrieves; paper remains a familiar backup/check.
+- Digital parchas and reports are used for selected workflows.
+- Daily close requires both operators or an agreed reviewer to acknowledge unresolved differences.
+- Measure entry time, correction rate, and reconciliation differences.
+
+#### Stage C — digital primary record
+
+- Move only reconciled modules to digital-first operation.
+- Retain printable/exportable records and a documented fallback procedure.
+- Do not switch every module on the same day.
+- Historical paper is migrated through controlled opening balances and selected detail, not fabricated transactions.
+
+Suggested promotion gate: a user-agreed period of consecutive daily closes with all material differences explained, tested backup restoration, and successful operation by both current operators. The duration remains to be decided.
+
 ## 9. Technology recommendation
 
 This is a proposed baseline, not permission to scaffold yet.
@@ -432,8 +507,8 @@ Responsive Next.js application
         |
 Server-side application/domain modules
         |
-PostgreSQL
-        +---- object storage for documents
+Supabase-hosted PostgreSQL
+        +---- Supabase Storage for documents, behind an adapter
         +---- optional background-job worker
 ```
 
@@ -447,16 +522,28 @@ Keep clear modules—identity, masters, trading, logistics, settlement, accounti
 | Web framework | Next.js App Router | Productive React stack, server and client capabilities, flexible Node/Docker hosting |
 | UI | Tailwind CSS + accessible headless components | Fast custom business UI without locking into a heavy visual framework |
 | Forms/validation | React Hook Form + Zod | Complex repeating lines and shared validation |
-| Database | PostgreSQL | Transactions, constraints, exact `numeric`, joins, reporting, mature backup tooling |
+| Database | Supabase-hosted PostgreSQL initially | Full remote PostgreSQL with transactions, constraints, exact `numeric`, joins, reporting, and a portable dump/restore path |
 | ORM | Prisma, with SQL for complex reports | Productive typed CRUD/migrations; do not hide financial reporting from SQL |
 | Authentication | Server-managed secure sessions | Avoid long-lived JWTs in browser storage; simpler revocation and role enforcement |
-| Files | S3-compatible object storage | RCs, slips, invoices, and attachments outside the database with metadata in PostgreSQL |
+| Files | Supabase Storage initially, behind an application interface | Kanta slips and attachments remain outside business tables; the interface preserves a future S3-compatible migration path |
 | Jobs | PostgreSQL-backed queue when needed | Avoid operating Redis solely for early background work |
 | Testing | Vitest + integration tests against PostgreSQL + Playwright | Formula, posting, permissions, and critical workflows need different test levels |
-| Deployment | Docker-capable Node service + managed PostgreSQL | Portability and simple recovery; Vercel remains possible but is not required |
+| Deployment | Docker-capable Node service + Supabase managed PostgreSQL | Application hosting remains independent from the database; Vercel remains possible but is not required |
 | Observability | Structured logs, error tracking, audit events, backup alerts | Financial correctness requires operational evidence |
 
 Pin actual versions only when scaffolding starts. Next.js documentation as of March 2026 supports full Node and Docker deployment. PostgreSQL exact `numeric` and constraints suit financial and weight invariants. Prisma maps PostgreSQL decimal/numeric to an exact Decimal type.
+
+The initial Supabase project is named **HisabKitab**, project reference `wpwrohqmjxwhdzoatlrq`, and is hosted in Mumbai (`ap-south-1`). At confirmation it was healthy on nano compute with no application migrations or repository integration. No database password, service-role key, or other secret may be placed in source control or project documentation.
+
+Supabase is the initial PostgreSQL host, not a temporary non-PostgreSQL database. Portability requirements are:
+
+- keep schema migrations in the repository;
+- use standard PostgreSQL types and only justified extensions;
+- connect server-side business services through the selected database layer;
+- do not allow browser clients to write financial tables directly;
+- keep provider-specific storage and authentication behind application interfaces;
+- maintain independent logical backups and test restoration;
+- prove a PostgreSQL dump/restore into a clean target before production reliance.
 
 ### 9.3 Financial implementation rules
 
@@ -493,8 +580,8 @@ These are design constraints, not legal or tax advice.
 | Area | Question / proposed baseline |
 | --- | --- |
 | Availability | Define operating hours and maximum tolerable outage |
-| Recovery | Daily automated backup; decide acceptable data loss and restore time; test restore |
-| Performance | Common search/list actions should feel immediate at expected volume |
+| Recovery | Automated backups plus point-in-time recovery where available; define near-zero acceptable loss for posted transactions and test restore |
+| Performance | Common entry/search should feel immediate; measure deals, loads, payments, and lines/day rather than relying on tonnage |
 | Devices | Confirm desktop, Android phone, tablet, printer, and scanner usage |
 | Connectivity | Measure actual office/mandi connectivity before committing to offline sync |
 | Languages | Confirm English, Hindi, and/or regional language; data entry should support Unicode |
@@ -502,15 +589,17 @@ These are design constraints, not legal or tax advice.
 | Data portability | CSV/Excel/PDF exports plus complete structured backup |
 | Accessibility | Readable density, keyboard support, contrast, and large touch targets where needed |
 | Supportability | Owner-visible health/backup status; documented recovery and admin operations |
+| Reconciliation | Daily cash/bank, party, stock, and paper-vs-digital close with visible unresolved differences |
+| Continuity | At least two trained operators, controlled emergency access, owner-held exports, and a tested fallback procedure |
 
 ## 12. Discovery questions that block design
 
 ### Business identity and compliance
 
 1. Which exact mandi/APMC and market area serves the Bhadohi operation?
-2. Are Sai Traders and Guru Dev Traders separate PANs/GSTINs/legal entities, or two trade names under one entity?
-3. What is the legal structure, GST registration status, approximate turnover band, and number of GSTINs/branches for each?
-4. For which transactions is the business principal/owner versus commission agent? Who owns the goods at each stage?
+2. What are the legal structure, PAN, GSTIN, bank accounts, and permitted users for Sai Traders and Guru Dev Traders?
+3. Which small trader firms in the current workflow are internal business firms, and which are external parties?
+4. Does any real transaction make the business a commission agent without owning the goods, or is every current deal principal trading?
 5. Which documents are currently issued/received: kacchi parchi, pakki parchi, UP Form 6/7/9, invoice, bill of supply, gate pass, external slip, weighment slip, or e-way bill?
 
 ### Daily operations
@@ -538,11 +627,15 @@ These are design constraints, not legal or tax advice.
 20. What devices, printers, and network quality are available?
 21. Which reports are checked every day, week, month, and financial year?
 22. How much historical paper/Excel data should be imported?
+23. How many deals, vehicle loads, purchase/sale lines, payments, and corrections occur on a peak day?
+24. What must match during parallel operation, who signs off the daily comparison, and how long must the system reconcile before becoming primary?
+25. If the father or uncle is unavailable, which tasks cannot currently continue and who should be trained as backup?
+26. Which five numbers must appear on the owner’s daily fingertip dashboard, and what is the trusted paper source for each?
 
 ## 13. Decision gates before coding
 
 1. Validate one normal and several exceptional transactions.
-2. Confirm principal-trader versus commission-agent behavior.
+2. Validate the principal-trader assumption and keep commission-agent behavior deferred unless a real example requires it.
 3. Confirm weight, deduction, charge, settlement, payment, stock, and profit rules.
 4. Validate compliance requirements with the business CA/accountant and state/APMC context.
 5. Approve V1 boundaries and user roles.

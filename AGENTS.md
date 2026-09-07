@@ -29,9 +29,9 @@ Keep the project memory current:
 
 ## 2. Current project phase
 
-HisabKitab is currently in **Phase 0: discovery and business-rule validation**.
+HisabKitab is currently in **Phase 1: technical foundation and business-rule validation**.
 
-Do not scaffold or implement the application merely because the repository is empty. The current gate is to validate real purchase, sale, settlement, payment, stock, profit, entity, and compliance behavior. Begin implementation only when the user explicitly advances the project or the documented decision gates have been cleared.
+The user explicitly advanced the project into technical setup. Maintain the application foundation, but do not invent transaction schemas, posting rules, or financial behavior merely because code now exists. Real purchase, sale, settlement, payment, stock, profit, entity, and compliance examples still gate their respective implementation slices.
 
 When implementation begins, build vertically: complete one real workflow end to end—including persistence, validation, accounting effects, permissions, failure handling, tests, and reports—before creating a broad collection of disconnected screens.
 
@@ -46,7 +46,7 @@ These rules apply unless a later recorded decision explicitly supersedes them:
 5. Posted financial or stock records are reversed, voided, or amended with reasons; they are not silently overwritten or hard-deleted.
 6. Preserve the original inputs and calculation/formula version used for a settlement. Configuration changes must not rewrite historical results.
 7. Keep legal entities and their books separate. A transaction, document series, GST registration, cash/bank account, stock ownership record, and journal belongs to exactly one entity unless an explicit inter-entity transaction is recorded.
-8. Record the business role per deal when principal-trader and commission/other-party models coexist. Ownership, revenue, stock, and profit treatment must follow that role.
+8. V1 models the confirmed principal-trading flow. Do not add commission-agent accounting unless a validated real transaction establishes it; if later introduced, ownership, revenue, stock, and profit treatment must follow the recorded business role.
 9. Treat deductions and charges explicitly: calculation method, base, payer, beneficiary, tax treatment, stock effect, and accounting classification must be known.
 10. Every displayed balance or report total must be explainable down to its source records and postings.
 11. Compliance configuration is effective-dated and professionally validated. Do not hard-code tax/APMC assumptions from commodity names or old examples.
@@ -342,3 +342,13 @@ Build HisabKitab so that years from now:
 - the business retains control of its data.
 
 The goal is not merely working software. The goal is a top-tier, production-grade full-stack product with exceptional engineering quality from the first commit onward.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

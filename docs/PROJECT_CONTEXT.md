@@ -2,9 +2,9 @@
 
 Last updated: 7 September 2026
 
-Current phase: Phase 0 — discovery and business-rule validation
+Current phase: Phase 1 — technical foundation and business-rule validation
 
-Implementation status: Not started
+Implementation status: Foundation scaffolded; transaction features and database schema not started
 
 ## 1. Why this project exists
 
@@ -22,6 +22,16 @@ Paper registers are familiar and flexible, but they create recurring problems:
 - business knowledge remains in people rather than in a repeatable system.
 
 HisabKitab should become the trusted operational record for the business without making daily entry slower than paper.
+
+### Current operating scale and concentration risk
+
+- Annual revenue/turnover is reported as more than ₹50 crore.
+- Daily money movement is reported at roughly ₹50 lakh.
+- Daily purchase and sale volume is reported at roughly 100 metric tonnes.
+- The calculation, memory, reconciliation, and operational control for this scale are currently handled mainly by two people: the owner’s father and uncle.
+- The current records remain predominantly paper-based.
+
+The primary risk is not database throughput. The current data volume is technically modest, but the financial value, operational dependency, and concentration of knowledge are high. HisabKitab exists to make the business explainable, searchable, measurable, and resilient without taking control away from the people who understand it today.
 
 ## 2. Business model understood so far
 
@@ -44,9 +54,9 @@ Financial layer: settlement, receipt/payment, ledger, outstanding, profit
 
 The business is based in **Bhadohi district, Uttar Pradesh** and sells to buyers across India, including Bihar, Madhya Pradesh, Gujarat, and Maharashtra. It both stores goods and moves some goods directly from seller to buyer.
 
-The user has indicated that the business operates in both principal-trader and commission/other-party contexts. The exact role must be recorded per deal because it changes inventory ownership, revenue recognition, invoices, taxes, and profit rules.
+The confirmed V1 business flow is principal trading: the business buys commodities from farmers and small traders, aggregates or transports them, and resells them to mills and larger firms. A broker may mediate the sale but does not change the business into a commission agent. Full commission-agent accounting is deferred unless a real transaction later establishes that requirement.
 
-Two trading names were identified: **Sai Traders** and **Guru Dev Traders**. It is not yet known whether these are separate legal entities/GST registrations or trade names under the same entity. Until that is resolved, no transaction may be allowed to move silently between their books.
+**Sai Traders** and **Guru Dev Traders** are separate GST-registered firms associated with Papa and Uncle. Additional legitimate firms may be added in future. V1 therefore requires a business-firm master and a firm field on every finalized purchase, sale, cash/bank movement, and report. Firm separation, tax treatment, and any inter-firm activity must be reviewed with the business accountant/CA; HisabKitab will not use a dummy or off-books firm.
 
 The current approximate transaction mix was described as:
 
@@ -62,11 +72,16 @@ Build a fast, dependable, auditable system that mirrors the real grain-trading w
 
 The product should feel like a better register, not a generic ERP imposed on the family. Familiar terminology, fast keyboard/mobile entry, local print formats, and simple corrections matter as much as technical sophistication.
 
+The desired outcome is an accurate fingertip view of current cash flow, purchases, sales, stock, party accounts, exposure, margins, historical performance, and growth. Analytics are useful only when every number can be traced to trusted source transactions.
+
+Adoption must be evolutionary rather than abrupt. The father and uncle should continue their familiar paper workflow during an initial parallel-run period while HisabKitab acts as digital support. The system earns authority by repeatedly matching paper calculations and making retrieval, reconciliation, and analysis easier. It should become the primary record only after agreed reconciliation and confidence gates are met.
+
 ## 4. Initial users
 
 | User | Primary need |
 | --- | --- |
 | Owner | Current cash, stock, margin, exposure, receivables, and payables |
+| Father and uncle / current operators | Preserve familiar working methods while gaining fast calculation, search, reconciliation, and continuity |
 | Accountant / munshi | Rapid entry, correct calculations, reconciliation, ledgers, exports, and closing |
 | Operations staff | Lot, vehicle, weighment, dispatch, and document entry |
 | Auditor / CA | Traceable source documents, tax fields, immutable history, and exports |
@@ -96,7 +111,8 @@ Actual roles and approval permissions remain to be confirmed.
 - record receipts, payments, advances, and their allocation;
 - generate party ledgers, outstanding reports, registers, and stock views;
 - maintain audit history and export data;
-- support responsive use and practical printing.
+- support responsive use and practical printing;
+- provide an operational dashboard for today’s purchases, sales, money movement, outstanding, stock, and unresolved exceptions after those source modules reconcile.
 
 ### Explicitly deferred until the core is stable
 
@@ -123,9 +139,13 @@ Candidate success measures to validate:
 - stock differences and unallocated payments are visible rather than hidden;
 - every material edit identifies who changed what, when, and why;
 - a backup can be restored and essential data can be exported without vendor help;
-- family users can operate the system after brief training.
+- family users can operate the system after brief training;
+- the paper and digital totals reconcile during an agreed parallel-run period;
+- the business can close each day with explained cash/bank, stock, payable, and receivable differences;
+- an authorized person can find any party, vehicle, load, payment, or settlement within seconds;
+- the business can continue safely if either of the two current operators is temporarily unavailable.
 
-Targets such as maximum entry time, number of users, and daily volume will be set during discovery.
+The reported scale is more than ₹50 crore annual revenue, around ₹50 lakh daily money movement, and around 100 metric tonnes of daily trade. The number of deals, loads, payments, users, and printouts per day still needs measurement because those counts—not tonnage alone—drive UX and capacity targets.
 
 ## 8. Journey log
 
@@ -168,9 +188,50 @@ The initial ChatGPT discussion defined the problem as automation of a traditiona
 - The remote had no advertised refs when connected, consistent with an empty repository.
 - The initial repository publication contains the engineering charter, discovery documents, decision log, transaction worksheet, and first validated purchase example.
 
+### 7 September 2026 — scale and adoption strategy clarified
+
+- The business scale was recorded as more than ₹50 crore annual revenue, approximately ₹50 lakh daily money movement, and approximately 100 metric tonnes bought/sold per day.
+- Operational knowledge and paper calculations are concentrated mainly in the owner’s father and uncle.
+- The core product purpose was refined: make accounts, cash flow, stock, analytics, history, and growth visible at the fingertips while reducing dependence on memory and two individuals.
+- A gradual adoption rule was accepted. Paper operations will continue during a parallel run; HisabKitab must first prove reconciliation and usefulness rather than forcing an abrupt cutover.
+- Operational dashboards and daily reconciliation were promoted as core outcomes, while predictive/advanced analytics remain deferred.
+
+### 7 September 2026 — lean V1 direction agreed
+
+- Sai Traders and Guru Dev Traders were confirmed as separate GST-registered firms; future firms must be addable.
+- The owner asked V1 to focus on the simplest useful questions: from whom the business bought and to whom it sold.
+- A sale example was added: 300 quintal of rice at ₹3,000 per quintal gives a gross sale of ₹9,00,000. A ₹3,000 buyer deduction produces ₹8,97,000 receivable before other buyer-facing adjustments. Brokerage is paid by the business per quintal, transport is calculated per actual quintal, and the ₹43 expense is a total amount; transport/expense responsibility, rates, receipt, and pending balance remain open.
+- Five warehouse locations were disclosed, but location-wise stock was explicitly deferred. V1 may use remarks instead.
+- Advanced weight discrepancy/shortage handling and detailed charge-accounting were deferred.
+- Bag weights were confirmed as variable (for example 50 kg, 60 kg, or 78 kg), so bag count and actual weight must be entered independently. Party GSTIN is optional.
+- The cash book was simplified to current available cash plus DB/Cash Out and CR/Cash In entries with amount, person, and remark. Papa defines DB as money given to suppliers and CR as money received from buyers.
+- Papa and Uncle are the initial direct users. Mixed-language, highly usable responsive screens and resilience to unreliable internet are required.
+- Kanta parchi attachments are relevant on purchase and sale. Printer-specific support remains future scope.
+- The dashboard will start with filtered KPIs and buyer/seller tables; charts are future scope.
+- `docs/MVP_SCOPE.md` became the concise V1 boundary.
+
+### 7 September 2026 — initial cloud database selected
+
+- The owner created a Supabase project named **HisabKitab** with project reference `wpwrohqmjxwhdzoatlrq`.
+- The project was verified as healthy in the Mumbai (`ap-south-1`) region on nano compute.
+- At verification it had no application migrations, branches, repository integration, or available backups, providing a clean starting point.
+- Supabase-hosted PostgreSQL was accepted as the initial remote database. This is already PostgreSQL; any future provider move should be a PostgreSQL dump/restore rather than an application data-model rewrite.
+- No schema was created because transaction rules remain under validation. Database migrations begin only after the relevant data model and financial posting rules are approved.
+- Secrets must remain outside Git and documentation. Independent logical backups and a restore test are required before production reliance.
+
+### 7 September 2026 — Phase 1 foundation scaffolded
+
+- The owner deliberately advanced the project from discovery-only work into technical setup while keeping unresolved transaction rules gated.
+- A Next.js modular monolith was scaffolded with strict TypeScript, Tailwind CSS, ESLint boundary rules, Vitest, and automated CI checks.
+- Presentation code lives in `src/frontend`, server application and configuration code in `src/backend`, framework adapters in `src/app`, and future pure accounting rules in `src/domain`.
+- A responsive mixed-language foundation page and a non-secret health endpoint were added without inventing purchase, sale, ledger, or tax behavior.
+- Supabase environment placeholders were documented; no secret, database migration, financial table, or direct browser database write was added.
+- The official Supabase and Supabase PostgreSQL Agent Skills were installed locally for future engineering work.
+- The Supabase MCP server was registered for project `wpwrohqmjxwhdzoatlrq`; OAuth authentication remains pending because the supplied feature names are not valid OAuth scopes and broad persistent write/secret access requires explicit owner authorization.
+
 ## 9. Current checkpoint
 
-We have a strong hypothesis, not a finalized specification. The next gate is business validation using real documents and calculations. After that:
+We have a runnable engineering foundation and a strong business hypothesis, not a finalized transaction specification. The next gate remains business validation using real documents and calculations. After that:
 
 ```text
 Validated examples

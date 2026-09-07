@@ -15,21 +15,21 @@ Status meanings:
 | ID | Status | Decision | Why / consequence | Validation needed |
 | --- | --- | --- | --- | --- |
 | D-001 | Accepted | Complete discovery before scaffolding UI/backend | Wrong settlement rules would force database and accounting redesign | Validate using real transactions |
-| D-002 | Accepted | PostgreSQL is the database direction | The domain needs transactions, constraints, joins, allocations, exact decimals, and reports | Select provider/version later |
+| D-002 | Accepted | PostgreSQL is the database direction | The domain needs transactions, constraints, joins, allocations, exact decimals, and reports | Initial provider selected in D-051 |
 | D-003 | Accepted | Ledgers and daily books are generated from source events | Prevents duplicate entry and unexplained balances | Posting matrix must reconcile with paper |
 | D-004 | Accepted | No floating-point arithmetic for money, rates, weights, or quantities | Financial and quantity rounding must be deterministic | Choose precision per field |
 | D-005 | Accepted | Posted records are reversed/amended, not hard-deleted | Preserves auditability and legal/business history | Define roles and closed-period flow |
 | D-006 | Accepted | V1 excludes AI, OCR, predictive analytics, and WhatsApp automation | Core operational correctness has higher value | Revisit after stable adoption |
 | D-007 | Proposed | Model deal, load/lot, weighment, settlement, invoice, payment, and journal separately | These events can occur at different times and in many-to-many patterns | Validate against real paper flow |
-| D-008 | Proposed | Use a unified Party with multiple roles | One firm can buy, sell, broker, or transport; duplicate masters split balances | Confirm current party practices |
-| D-009 | Proposed | Use kg as canonical mass while retaining original units | Supports consistent stock and conversion without losing source meaning | Confirm units and bag behavior |
+| D-008 | Accepted | Use a unified Party with multiple roles and optional GSTIN | One party can buy, sell, broker, or transport; GSTIN absence must not block ordinary party creation | Validate only compliance-required fields with CA |
+| D-009 | Accepted | Use kg as canonical mass while retaining original units; never infer weight from bag count | Bags have variable weights such as 50 kg, 60 kg, or 78 kg | Confirm quantity precision and rounding |
 | D-010 | Proposed | Hide double-entry mechanics behind business actions | Users understand “pay” and “receive”; balanced postings protect correctness | Review journal examples with accountant |
-| D-011 | Proposed | Build a modular monolith with Next.js and PostgreSQL | Fastest path for a small team while preserving module boundaries | Confirm expected clients/team/scale |
+| D-011 | Accepted | Build a modular monolith with Next.js and PostgreSQL | The owner selected the stack and explicitly required frontend/backend separation; one deployable app keeps V1 operations simple while enforced module boundaries preserve separation of concerns | Reassess only if measured clients/team/scale demand it |
 | D-012 | Proposed | Use Prisma for mainstream typed CRUD and explicit SQL for complex reports | Balances developer speed with transparent reporting | Run schema/reporting spike before lock |
 | D-013 | Proposed | Start responsive and connection-resilient, not fully offline-first | Full financial conflict resolution is expensive and risky without evidence | Measure actual connectivity |
 | D-014 | Proposed | Build one purchase-to-payment vertical slice before all screens | Tests domain, accounting, permissions, and reporting end-to-end | Approve after discovery |
 | D-015 | Proposed | Use formula versions and settlement snapshots | Old transactions must not change when rate-card logic changes | Confirm amendment policy |
-| D-016 | Accepted | Support principal-trader and commission/other-party roles per deal | The business reports using both models; ownership, revenue, inventory, invoice, and profit treatment differ | Map exact role and postings using examples |
+| D-016 | Superseded | Support principal-trader and commission/other-party roles per deal | Later clarification established principal trading as the V1 flow | Replaced by D-046 |
 | D-017 | Open | Stock valuation: specific lot, FIFO, weighted average, or combination | Determines COGS and profit | Work examples required |
 | D-018 | Open | Authoritative weights and shortage responsibility | Seller payable, buyer receivable, stock, and transporter liability may differ | Work examples required |
 | D-019 | Open | Tax/APMC rules and documents | Depend on state, registration, turnover, commodity, packaging, and trade type | State + CA/APMC review required |
@@ -41,11 +41,36 @@ Status meanings:
 | D-025 | Accepted | Support both warehoused and direct seller-to-buyer fulfilment | Both are used in the business and have different stock/ownership events | Map ownership transfer for each |
 | D-026 | Proposed | Allow one residual commodity weight per multi-commodity vehicle | First real purchase calculates wheat as net vehicle weight minus rice weight | Confirm behavior for 3+ commodities and tolerance |
 | D-027 | Accepted | Support both line-level and purchase-level adjustments | First real purchase has quality deductions per commodity and shared purchase deductions | Classify charge liability/cost treatment |
-| D-028 | Open | Sai Traders and Guru Dev Traders entity relationship | Separate entities require isolated books, registrations, numbering, stock, and bank accounts | PAN/GSTIN/legal structure answer required |
+| D-028 | Accepted | Sai Traders and Guru Dev Traders are separate GST-registered business firms | Transactions, documents, money accounts, and reports must be firm-scoped; future firms are addable | Confirm PAN/bank/inter-firm details |
 | D-029 | Open | Uttar Pradesh mandi/APMC forms applicable in Bhadohi | UP e-Mandi exposes licence and Form 6/7/9/gate-pass workflows; exact applicability varies | Verify with local records/professional |
 | D-030 | Open | Purpose and beneficiary of Kanta, sack, Hamali, and other deductions | A deduction from seller payable is not automatically the same as an expense or inventory-cost reduction | Owner/accountant answer required |
+| D-031 | Accepted | Adopt gradually through paper-plus-digital parallel operation | Current operators should not abandon a trusted workflow abruptly; the product must earn trust through reconciliation | Define promotion period and sign-off |
+| D-032 | Accepted | Treat continuity and control as primary product outcomes | More than ₹50 crore revenue, roughly ₹50 lakh daily money movement, and roughly 100 tonnes daily are concentrated in two operators | Identify backup operator and access plan |
+| D-033 | Proposed | Add a formal daily close and reconciliation workflow | High-value daily movement requires explained cash/bank, stock, party, and paper-vs-digital differences | Reproduce the current end-of-day check |
+| D-034 | Accepted | Include a traceable operational dashboard after source modules reconcile | Fingertip visibility is a core reason for the product, but metrics cannot precede trustworthy data | Select first five metrics and definitions |
+| D-035 | Open | Define parallel-run exit criteria | Digital-first adoption needs evidence rather than a calendar promise | Choose duration, tolerance, and approvers |
+| D-036 | Open | Measure transaction counts and peak entry load | Tonnage and rupee value describe risk, not UI/database operation counts | Observe at least one normal and peak day |
+| D-037 | Open | Define business-continuity ownership | Two-person concentration is a material operational risk | Name backup users, emergency procedure, and export custody |
+| D-038 | Accepted | Keep V1 focused on buy-from and sell-to workflows | Owner explicitly requested simplicity over comprehensive ERP behavior | Use `MVP_SCOPE.md` as boundary |
+| D-039 | Accepted | Defer warehouse/location tracking | Five locations exist but the owner does not need structured location records now | Allow remarks; revisit with stock need |
+| D-040 | Accepted | Use DB/Cash Out and CR/Cash In in the simple cash book | Matches Papa’s convention while retaining understandable labels | Validate opening/closing cash example |
+| D-041 | Accepted | Papa and Uncle are initial direct users | UX must optimize for their terminology, speed, mixed language, and responsive devices | Observe device and entry behavior |
+| D-042 | Accepted | Support unreliable internet with local drafts and explicit sync state | Work must not be lost, but offline records cannot silently alter official balances | Prototype and test reconnection behavior |
+| D-043 | Accepted | Defer printer integrations and dashboard charts | Tables, KPIs, and attachments provide the first useful value | Revisit after pilot |
+| D-044 | Accepted | Require a business firm before final posting | `Unassigned` can preserve an incomplete draft but cannot serve as an off-books entity | Define review/assignment responsibility |
+| D-045 | Proposed | Use one simple form per purchase/sale while storing structured child records | Keeps operator UX simple without sacrificing calculations, ledger generation, or future extension | Validate form with Papa and Uncle |
+| D-046 | Accepted | Model principal trading in V1; defer full commission-agent accounting | The confirmed flow is seller/farmer → business → buyer/mill, with broker as mediator | Revisit only with a real non-ownership transaction |
+| D-047 | Accepted | Support only legitimate, separately accounted business firms | Multi-firm records must remain firm-scoped and professionally reviewed; no dummy or off-books firm is permitted | Validate tax and inter-firm rules with CA |
+| D-048 | Accepted | Sale brokerage is a business-paid cost calculated per actual quintal | It creates a broker payable/expense and does not reduce buyer receivable | Capture the example rate and payment timing |
+| D-049 | Accepted | Sale transport is calculated as rate × actual weight in quintal | The earlier `rate × 100` was clarified as a weight-based calculation | Confirm who bears transport per sale |
+| D-050 | Accepted | A buyer-facing sale deduction reduces receivable | In Sale Example 001, ₹9,00,000 less ₹3,000 produces ₹8,97,000 receivable before other buyer-facing adjustments | Name the deduction type |
+| D-051 | Accepted | Use Supabase-hosted PostgreSQL as the initial remote database | The owner created a healthy HisabKitab project in Mumbai; Supabase provides full PostgreSQL and avoids operating a database server during V1 | Review plan/backups before production use |
+| D-052 | Accepted | Keep Supabase usage PostgreSQL-portable | Version schema in repository migrations, use standard PostgreSQL types, keep financial rules in application modules, and avoid direct browser writes to financial tables | Prove dump/restore and provider migration before production |
+| D-053 | Proposed | Use Supabase Storage behind an application storage interface | Convenient for Kanta parchi attachments while allowing a later S3-compatible replacement | Validate limits, access policy, backup/export, and cost |
+| D-054 | Accepted | Begin a technical foundation while keeping transaction implementation gated | The owner explicitly advanced setup; routing, UI shell, boundaries, tests, and CI can be established without inventing unresolved financial rules | Business examples still gate schema and posting code |
+| D-055 | Accepted | Use pnpm, strict TypeScript, ESLint boundary rules, Vitest, and CI for the initial codebase | Reproducible dependencies and automated architecture/quality checks reduce risk before financial modules are added | Review versions during planned upgrades |
 
-## Architecture checkpoints before D-011/D-012 are accepted
+## Data-layer checkpoints before D-012 is accepted
 
 - Demonstrate an atomic settlement posting and reversal against PostgreSQL.
 - Demonstrate Decimal serialization from form → server → database → report.
