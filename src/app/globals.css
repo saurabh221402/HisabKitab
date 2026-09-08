@@ -1,12 +1,65 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
-  font-family:
+  --app-color-canvas: #faf8f3;
+  --app-color-surface: #fffdf7;
+  --app-color-surface-raised: #ffffff;
+  --app-color-ink: #1c1917;
+  --app-color-ink-muted: #57534e;
+  --app-color-ink-subtle: #78716c;
+  --app-color-line: #e7e5e4;
+  --app-color-brand: #166534;
+  --app-color-brand-strong: #14532d;
+  --app-color-brand-soft: #dcfce7;
+  --app-color-accent: #b45309;
+  --app-color-accent-soft: #fff7ed;
+  --app-color-info: #1d4ed8;
+  --app-color-info-soft: #eff6ff;
+  --app-color-warning: #b45309;
+  --app-color-warning-strong: #7c2d12;
+  --app-color-warning-soft: #fff7ed;
+  --app-color-danger: #b91c1c;
+  --app-color-danger-soft: #fef2f2;
+  --app-color-focus: #15803d;
+  --app-font-sans:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  background: #faf8f3;
-  color: #1c1917;
+  --app-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --app-radius-card: 1.5rem;
+  --app-content-width: 72rem;
+  --app-content-gutter: 1.25rem;
+  --app-section-space: clamp(4rem, 8vw, 6rem);
+  --app-shadow-card: 0 18px 55px -44px rgb(41 37 36 / 60%);
+  --app-shadow-feature: 0 24px 80px -40px rgb(41 37 36 / 45%);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-canvas: var(--app-color-canvas);
+  --color-surface: var(--app-color-surface);
+  --color-surface-raised: var(--app-color-surface-raised);
+  --color-ink: var(--app-color-ink);
+  --color-ink-muted: var(--app-color-ink-muted);
+  --color-ink-subtle: var(--app-color-ink-subtle);
+  --color-line: var(--app-color-line);
+  --color-brand: var(--app-color-brand);
+  --color-brand-strong: var(--app-color-brand-strong);
+  --color-brand-soft: var(--app-color-brand-soft);
+  --color-accent: var(--app-color-accent);
+  --color-accent-soft: var(--app-color-accent-soft);
+  --color-info: var(--app-color-info);
+  --color-info-soft: var(--app-color-info-soft);
+  --color-warning: var(--app-color-warning);
+  --color-warning-strong: var(--app-color-warning-strong);
+  --color-warning-soft: var(--app-color-warning-soft);
+  --color-danger: var(--app-color-danger);
+  --color-danger-soft: var(--app-color-danger-soft);
+  --color-focus: var(--app-color-focus);
+  --font-sans: var(--app-font-sans);
+  --font-mono: var(--app-font-mono);
+  --radius-card: var(--app-radius-card);
+  --shadow-card: var(--app-shadow-card);
+  --shadow-feature: var(--app-shadow-feature);
 }
 
 * {
@@ -15,17 +68,71 @@
 
 html {
   min-width: 320px;
-  background: #faf8f3;
+  background: var(--app-color-canvas);
 }
 
 body {
   min-height: 100vh;
   margin: 0;
-  background: #faf8f3;
+  background: var(--app-color-canvas);
+  color: var(--app-color-ink);
+  font-family: var(--app-font-sans);
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: #bbf7d0;
-  color: #14532d;
+  background: var(--app-color-brand-soft);
+  color: var(--app-color-brand-strong);
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--app-color-focus) 70%, transparent);
+  outline-offset: 3px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+@layer components {
+  .app-container {
+    width: 100%;
+    max-width: var(--app-content-width);
+    margin-inline: auto;
+    padding-inline: var(--app-content-gutter);
+  }
+
+  .app-section {
+    padding-block: var(--app-section-space);
+  }
+
+  .app-hero-surface {
+    background:
+      radial-gradient(circle at top right, rgb(20 83 45 / 11%), transparent 42%),
+      linear-gradient(180deg, var(--app-color-surface) 0%, #f6f1e7 100%);
+  }
+}
+
+@media (min-width: 40rem) {
+  :root {
+    --app-content-gutter: 2rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --app-content-gutter: 2.5rem;
+  }
 }

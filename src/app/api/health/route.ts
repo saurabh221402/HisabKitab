@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export function GET(): Response {
   const environment = readRuntimeEnvironment();
   const health = getSystemHealth({
-    databaseConfigured: environment.databaseConfigured,
+    supabaseConfigured: environment.supabaseConfigured,
     now: new Date(),
   });
 

@@ -1,0 +1,2 @@
+-- Production-like business data belongs in reviewed migrations.
+-- Keep local-only test fixtures in dedicated test scripts so `db reset` stays predictable.

@@ -1,5 +1,13 @@
-import { FoundationPage } from "@/frontend/features/foundation/foundation-page";
+import { getDashboardOverview } from "@/backend/application/dashboard/get-dashboard-overview";
+import { DashboardPage } from "@/frontend/features/dashboard/dashboard-page";
 
-export default function HomePage() {
-  return <FoundationPage />;
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const businessDate = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Kolkata",
+  });
+  const overview = await getDashboardOverview(businessDate);
+
+  return <DashboardPage overview={overview} />;
 }

@@ -5,7 +5,7 @@ import { getSystemHealth } from "./get-system-health";
 describe("getSystemHealth", () => {
   it("reports database configuration without exposing credentials", () => {
     const result = getSystemHealth({
-      databaseConfigured: true,
+      supabaseConfigured: true,
       now: new Date("2026-09-07T12:00:00.000Z"),
     });
 

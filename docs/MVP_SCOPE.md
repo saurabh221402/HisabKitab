@@ -1,8 +1,8 @@
 # HisabKitab — Lean V1 Scope
 
-Last updated: 7 September 2026
+Last updated: 8 September 2026
 
-Status: Proposed from owner discovery; ready for final formula clarification
+Status: Accepted Phase 1 boundary; operational core and initial users activated, awaiting paper reconciliation
 
 ## 1. V1 objective
 
@@ -37,8 +37,8 @@ The UI should be simple; the stored data must remain reliable.
 
 Initial users:
 
-- Papa
-- Uncle
+- Papa — active Main account
+- Uncle — active Main account
 
 Authentication:
 
@@ -46,6 +46,7 @@ Authentication:
 - password;
 - secure server session;
 - login-based access to permitted firms and records.
+- invite/admin-only registration; public self-signup is disabled.
 
 Business-firm master:
 
@@ -79,7 +80,7 @@ Other masters:
 
 - commodities;
 - rate units such as kg/quintal;
-- common deduction/expense labels;
+- buyer-deduction reason labels such as moisture and quality;
 - vehicles linked to transporters when known.
 
 Do not create separate duplicate records if one party has several roles.
@@ -101,7 +102,7 @@ One purchase screen should capture:
 - calculated gross amount;
 - item-level deduction;
 - item final amount;
-- purchase-level deduction lines;
+- one seller-borne purchase deduction total with optional remark;
 - final payable;
 - amount paid now;
 - payment mode;
@@ -136,17 +137,15 @@ One sale screen should capture:
 - calculated gross sale amount;
 - broker and brokerage rate/amount;
 - transporter and transport rate/basis/amount;
-- simple deduction lines;
-- simple expense lines;
+- reasoned buyer-deduction lines;
 - final receivable;
-- amount received;
-- payment mode;
+- one or more receipt portions split between cash and the selling firm's bank accounts;
 - pending balance;
 - vehicle/Kanta details when available;
 - remark;
 - optional Kanta parchi attachment.
 
-V1 should support the provided simple case of 300 quintal of rice at ₹3,000 per quintal, producing a gross sale of ₹9,00,000. A ₹3,000 buyer deduction produces a currently validated receivable of ₹8,97,000 before any other buyer-facing adjustment. Brokerage is paid by the business and tracked separately as `brokerage rate × sale weight in quintal`; it does not reduce the buyer balance. Transport is also calculated as `transport rate × sale weight in quintal`, although who bears it still needs confirmation.
+V1 should support the provided simple case of 300 quintal of rice at ₹3,000 per quintal, producing a gross sale of ₹9,00,000. A ₹3,000 buyer deduction with a required moisture, quality, or other reason produces a final receivable of ₹8,97,000. Brokerage and transport are paid by the business and tracked separately as their respective `rate × sale weight in quintal`; neither reduces the buyer balance. The generic sale-expense field is excluded.
 
 Bag count is informational. Bags may weigh 50 kg, 60 kg, 78 kg, or another amount, so the application must never infer sale weight from bag count.
 
@@ -168,7 +167,7 @@ Minimum cash-entry fields:
 - remark;
 - created by.
 
-Current available cash is derived:
+The shared operational cash position is derived while each source movement retains its business firm:
 
 ```text
 Closing cash = opening cash + cash in − cash out
@@ -183,6 +182,17 @@ For banks in early V1:
 - optionally attach the bank statement;
 - add statement import and automatic reconciliation later.
 
+The default operational overview shows:
+
+```text
+Total available funds
+  = shared operational cash
+  + recorded Sai Traders bank balances
+  + recorded Guru Dev Traders bank balances
+```
+
+This consolidated view does not merge the firms' underlying legal records.
+
 ### Module F — Party hisab and outstanding
 
 Generated automatically from purchases, sales, and money entries:
@@ -196,10 +206,10 @@ Generated automatically from purchases, sales, and money entries:
 
 V1 payment behavior:
 
-- payment may link directly to one purchase/sale;
-- otherwise it remains an on-account party amount;
-- advances remain visible;
-- no complex allocation UI unless real usage requires it.
+- payment/receipt portions link directly to one purchase/sale;
+- receipts may be split between cash and one or more bank accounts of the selling firm;
+- on-account advances and later allocation are deferred;
+- linked settlement cannot exceed the source transaction's outstanding balance.
 
 ### Module G — Dashboard and tables
 
@@ -212,15 +222,15 @@ Initial filters:
 - transaction type;
 - cash or bank.
 
-Initial KPI candidates:
+The five primary mobile KPIs are:
 
-- total purchase value and weight;
-- total sale value and weight;
-- cash available;
-- cash in and cash out;
-- total seller payable;
-- total buyer receivable;
-- pending/unsettled purchase and sale counts.
+- net purchase value;
+- gross sale value;
+- seller outstanding;
+- buyer outstanding;
+- total available funds.
+
+Weight, paid/received, cash in/out, and pending counts remain available as secondary facts.
 
 Initial tables:
 
@@ -248,12 +258,12 @@ Even with simple screens, V1 must retain:
 
 The application should be responsive and installable as a PWA when practical.
 
-Lean V1 offline behavior:
+Lean V1 poor-connection behavior:
 
 - previously loaded app shell remains available;
-- unfinished forms can be saved locally as clearly labelled drafts;
-- a user can see whether a draft is local, syncing, synced, or failed;
-- duplicate-safe synchronization occurs when connectivity returns;
+- changed purchase and sale forms autosave locally as clearly labelled device drafts;
+- a saved draft restores after reload and can be explicitly discarded;
+- posting is duplicate-safe when connectivity returns;
 - only server-confirmed records affect official balances and dashboards;
 - conflicting posted financial edits are not merged silently.
 
@@ -274,7 +284,8 @@ This provides useful resilience without building a full multi-user offline datab
 - direct GST/e-invoice/e-way-bill integration;
 - WhatsApp automation;
 - OCR, AI, forecasting, and market-rate automation;
-- full offline conflict resolution.
+- full offline conflict resolution;
+- on-account advances and later allocation.
 
 Deferred functionality must not block simple notes/remarks or later schema evolution.
 
@@ -292,9 +303,9 @@ Each slice must use real examples and reconcile before the next becomes authorit
 
 ## 7. Remaining decisions before implementation
 
-1. Whether transport in Sale Example 001 is paid by the business, buyer, or seller.
-2. Whether the ₹43 total expense changes buyer receivable or is a separate business expense.
-3. The brokerage rate, transport rate, amount received, payment mode, and selling firm for the example.
-4. Whether small trader firms are internal business firms or external parties; GSTIN is optional and does not determine the classification.
-5. How a finalized cash transaction without a current firm is lawfully assigned and reported.
-6. Whether bank entries are manually entered in V1 or only recorded through linked purchase/sale payments plus a statement attachment.
+1. The brokerage rate, transport rate, exact cash/bank receipt split, and selling firm for Sale Example 001.
+2. The payment account/mode and purchasing firm for Purchase Example 001.
+3. Whether small trader firms are internal business firms or external parties; GSTIN is optional and does not determine the classification.
+4. Who sets the initial shared cash and firm-bank opening balances, whether physical cash is counted daily, and how often bank balances are manually reconciled.
+5. The derived-money rounding rule when whole-kilogram weight and whole-rupee rate produce paise.
+6. Whether Kanta numbers can repeat by weighbridge/date and whether a purchase can contain more than two commodities.

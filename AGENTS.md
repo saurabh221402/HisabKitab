@@ -14,6 +14,8 @@ Before planning or changing the product, read the relevant living documents:
 - `docs/PROJECT_CONTEXT.md`
 - `docs/DISCOVERY.md`
 - `docs/DECISIONS.md`
+- `docs/MVP_SCOPE.md`
+- `docs/PRD_PHASE_1.md`
 - `docs/TRANSACTION_WORKSHEET.md`
 - relevant files under `docs/examples/`
 
@@ -45,7 +47,7 @@ These rules apply unless a later recorded decision explicitly supersedes them:
 4. Never use binary floating point for money, rates, quantities, or weights. Use exact decimal arithmetic and explicit, versioned rounding rules.
 5. Posted financial or stock records are reversed, voided, or amended with reasons; they are not silently overwritten or hard-deleted.
 6. Preserve the original inputs and calculation/formula version used for a settlement. Configuration changes must not rewrite historical results.
-7. Keep legal entities and their books separate. A transaction, document series, GST registration, cash/bank account, stock ownership record, and journal belongs to exactly one entity unless an explicit inter-entity transaction is recorded.
+7. Keep legal entities and their books separate. A transaction, document series, GST registration, bank account, stock ownership record, and journal belongs to exactly one entity unless an explicit inter-entity transaction is recorded. The approved Group Overview may aggregate shared operational cash and firm-bank balances, but every underlying source movement retains firm/account attribution and the aggregate is never presented as a combined legal ledger.
 8. V1 models the confirmed principal-trading flow. Do not add commission-agent accounting unless a validated real transaction establishes it; if later introduced, ownership, revenue, stock, and profit treatment must follow the recorded business role.
 9. Treat deductions and charges explicitly: calculation method, base, payer, beneficiary, tax treatment, stock effect, and accounting classification must be known.
 10. Every displayed balance or report total must be explainable down to its source records and postings.

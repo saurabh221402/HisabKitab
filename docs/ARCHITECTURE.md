@@ -1,8 +1,8 @@
 # HisabKitab — Application Architecture
 
-Last updated: 7 September 2026
+Last updated: 8 September 2026
 
-Status: Initial foundation; transactional domain and database schema remain gated by business-rule validation
+Status: Phase 1 operational core implemented; authenticated operator validation pending
 
 ## Architecture choice
 
@@ -61,6 +61,14 @@ src/shared
 - Contains only genuinely environment-neutral code.
 - Must not become a miscellaneous utility directory or a way to bypass boundaries.
 
+## Global design-system boundary
+
+- `src/app/globals.css` owns semantic design tokens for typography, colors, spacing, surfaces, borders, focus treatment, radii, and shadows. Shared manifest/browser-chrome values live in `src/shared/ui-theme.ts` because CSS custom properties are unavailable to Next.js metadata generation.
+- Feature components use semantic tokens such as `brand`, `surface`, `ink`, and `line`; they do not establish competing page-level themes or repeat raw brand color values.
+- Components still own local layout and interaction states when those choices are specific to the component.
+- Reusable interface primitives will live under `src/frontend` and consume the same global tokens.
+- A future alternate theme changes token values at the global boundary rather than rewriting feature components.
+
 ## Data and security boundary
 
 ```text
@@ -90,8 +98,14 @@ The browser will not write directly to financial tables. Supabase credentials re
 6. Exact decimal values cross boundaries as explicit decimal strings, never JavaScript binary floating point.
 7. Only server-confirmed records affect balances; local/offline records remain visibly labelled drafts.
 
-## Current setup boundary
+## Implemented data boundary
 
-The foundation intentionally includes no transaction tables or provisional accounting schema. The next implementation slice starts only after the relevant purchase/payment rules and data model are accepted.
+Versioned Supabase migrations now provide business firms, user profiles and firm access, reusable parties and roles, commodities, bank accounts, purchases and sales, linked payments and split receipts, manual cash entries, one controlled operational-cash opening, audit events, and security-invoker reporting views. Every exposed table has RLS enabled. The browser submits financial work only through authenticated server actions; PostgreSQL revalidates posting invariants and commits each aggregate, settlement portions, status, and audit event in one transaction.
+
+Purchase and sale arithmetic are implemented independently in `src/domain`: whole kilograms and whole-rupee rates produce integer paise exactly. Database generated columns and posting checks independently enforce the same weight and money relationships. Posted records receive no direct update or delete path in these slices.
+
+Daily Rokad is a read model over posted cash purchase payments, posted cash sale receipts, and explicit manual cash entries. Bank balances similarly derive from account openings plus source-linked bank movements. Party positions and dashboard KPIs are read models over the same posted sources; the UI never asks operators to reproduce ledger totals manually.
+
+Supabase Auth uses cookie-based SSR with `@supabase/ssr`; the Next.js proxy refreshes and validates claims before protected routes. A missing local key leaves the design preview available for setup, while a configured project requires login.
 
 The production build currently uses Next.js's supported webpack path. Turbopack's CSS worker cannot bind its internal local port in the current Codex execution environment; this choice is a build-environment compatibility measure, not an application architecture dependency, and can be re-evaluated after the toolchain changes.

@@ -2,6 +2,8 @@
 
 Source: Business owner example supplied 7 September 2026
 
+Last updated: 8 September 2026
+
 Transaction date: 7 September 2026
 
 Validation status: Arithmetic validated; accounting/compliance classification pending
@@ -75,6 +77,8 @@ Commodity subtotal = final rice amount + final wheat amount
 
 ## 6. Purchase-level deductions
 
+The paper example supplied separate labels. Phase 1 combines these into one seller-borne `Purchase deduction` amount with an optional remark, while this table remains as source evidence for how ₹5,500 was obtained.
+
 | Deduction | Method | Amount |
 | --- | --- | ---: |
 | Kanta / weight charge | Flat purchase-level amount | ₹500 |
@@ -88,6 +92,8 @@ Total purchase-level deductions
   = ₹500 + ₹1,500 + ₹3,000 + ₹500
   = ₹5,500
 ```
+
+Phase 1 posting effect: the combined ₹5,500 reduces the supplier payable. It does not create a separate Kanta, sack, Hamali, or other-party liability.
 
 ## 7. Final supplier settlement
 
@@ -118,7 +124,7 @@ Validated invariant:
 3. Commodity lines must reconcile to vehicle net weight.
 4. Exactly one commodity line may be calculated as the residual.
 5. Rates can be per quintal while source weights are in kilograms.
-6. A purchase has item-level deductions and purchase-level deductions.
+6. A purchase has item-level deductions plus one combined seller-borne purchase deduction total.
 7. A purchase can be partially paid immediately.
 8. Outstanding is derived from settlement less allocated payments.
 9. The printed/digital parcha must show formulas and both quantity units.
@@ -137,7 +143,7 @@ Purchase deal / header
   +-- Wheat residual allocation
   |     +-- rate
   |     +-- quality deduction
-  +-- Purchase-level deductions
+  +-- Combined seller-borne purchase deduction
   +-- Final settlement
   +-- ₹2,00,000 payment allocation
   +-- ₹1,73,100 outstanding
@@ -151,17 +157,14 @@ Purchase deal / header
 3. Can a vehicle carry more than two commodities? If so, how are individual weights measured and which single line, if any, may be residual?
 4. Is 1 quintal always exactly 100 kg for every rate calculation? Expected yes, but it should be confirmed as the canonical conversion.
 5. Are item quality deductions always flat money, or can they be based on percentage, weight cut, rate cut, or moisture formula?
-6. Why were Kanta, plastic sack, Hamali, and other charges deducted from the supplier?
-7. Who ultimately receives each purchase-level amount? Is the business separately liable to a weighbridge, labourer, packaging provider, or other party?
-8. Do those charges reduce inventory cost, increase inventory cost as third-party expenses, or only reduce the supplier payable?
-9. Which legal business—Sai Traders or Guru Dev Traders—owns this purchase?
-10. Was ₹2,00,000 paid by cash or a bank account, and from which legal entity’s account?
-11. Were GST, mandi fee/cess, TDS/TCS, Form 6/7/9, gate pass, invoice/bill of supply, and e-way bill applicable? None appear in the example.
-12. Where did the 10,000 kg enter stock, or was it directly dispatched to a buyer?
+6. Which legal business—Sai Traders or Guru Dev Traders—owns this purchase?
+7. Was ₹2,00,000 paid by cash or a bank account, and from which legal entity’s account?
+8. Were GST, mandi fee/cess, TDS/TCS, Form 6/7/9, gate pass, invoice/bill of supply, and e-way bill applicable? None appear in the example.
+9. Where did the 10,000 kg enter stock, or was it directly dispatched to a buyer?
 
-## 12. Illustrative ledger behavior—not yet approved
+## 12. Validated Phase 1 supplier-balance behavior
 
-If every deduction solely reduces the supplier price and there are no separate third-party liabilities, the supplier subledger would provisionally behave as:
+The seller-borne purchase deductions reduce the supplier price and create no separate third-party liability in Phase 1:
 
 ```text
 Final purchase settlement creates supplier payable:  ₹3,73,100
@@ -169,4 +172,4 @@ Payment allocated to settlement:                     (₹2,00,000)
 Remaining supplier payable:                           ₹1,73,100
 ```
 
-This does **not** settle inventory cost, expense, tax, or journal entries. Those postings depend on the unresolved charge-beneficiary, tax, ownership, and stock rules above.
+This validates the operational supplier balance only. It does **not** settle inventory cost, tax, or stock/journal treatment, which remain outside this Phase 1 example.

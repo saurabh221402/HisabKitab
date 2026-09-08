@@ -6,14 +6,14 @@ export type SystemHealth = Readonly<{
 }>;
 
 type SystemHealthInput = Readonly<{
-  databaseConfigured: boolean;
+  supabaseConfigured: boolean;
   now: Date;
 }>;
 
 export function getSystemHealth(input: SystemHealthInput): SystemHealth {
   return {
     checkedAt: input.now.toISOString(),
-    databaseConfiguration: input.databaseConfigured
+    databaseConfiguration: input.supabaseConfigured
       ? "configured"
       : "not-configured",
     service: "HisabKitab",

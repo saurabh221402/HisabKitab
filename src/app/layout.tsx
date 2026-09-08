@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
 import { projectMetadata } from "@/shared/project-metadata";
+import { uiTheme } from "@/shared/ui-theme";
 
 import "./globals.css";
 
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "light",
-  themeColor: "#14532d",
+  themeColor: uiTheme.browserChromeColor,
 };
 
 type RootLayoutProps = Readonly<{
@@ -31,7 +32,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en-IN">
       <body>
         <a
-          className="fixed top-3 left-3 z-50 -translate-y-20 rounded-lg bg-stone-950 px-4 py-2 text-sm font-semibold text-white transition-transform focus:translate-y-0"
+          className="bg-ink text-surface-raised fixed top-3 left-3 z-50 -translate-y-20 rounded-lg px-4 py-2 text-sm font-semibold transition-transform focus:translate-y-0"
           href="#main-content"
         >
           Skip to content

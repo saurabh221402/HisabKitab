@@ -1,6 +1,7 @@
 # HisabKitab — Product, Business, and Technical Discovery
 
 Last researched: 7 September 2026
+Last updated from owner discovery: 8 September 2026
 Status: Working hypotheses; requires validation with the business owner and accountant/CA
 
 ## 1. Executive conclusions
@@ -181,11 +182,11 @@ Rules below are proposed defaults. Items marked **Validate** must not be treated
 
 - Store separately: deal date, dispatch date, weighment date, delivery date, settlement/invoice date, due date, payment date, and recorded-at time.
 - Store timestamps in UTC and display in the business timezone; store business dates as dates.
-- Backdating after period close requires permission and a reason.
+- Backdating is allowed only for the Main role and requires a reason plus an additional date-impact confirmation. Reopening a closed day follows the same protection.
 
 ### BR-003 — Status and editing
 
-Proposed lifecycle: `DRAFT → CONFIRMED → IN_PROGRESS → DELIVERED → SETTLED → CLOSED`.
+The Phase 1 lifecycle is deliberately simpler: `DRAFT → POSTED → REVERSED`, with a replacement draft for correction. The longer operational lifecycle remains a future hypothesis.
 
 - Drafts may be edited.
 - Confirmation freezes the commercial terms unless an authorized amendment is recorded.
@@ -195,7 +196,7 @@ Proposed lifecycle: `DRAFT → CONFIRMED → IN_PROGRESS → DELIVERED → SETTL
 
 ### BR-004 — Quantity and weight
 
-- Use kilograms as the canonical physical mass while retaining the entered unit and value.
+- Use whole kilograms as the canonical Phase 1 physical-mass input while retaining the entered unit and value.
 - Store quantity with adequate decimal precision; never use binary floating point.
 - `netWeight = grossWeight - tareWeight` when both readings exist.
 - Retain seller weight, transporter/dispatch weight, buyer weight, and accepted settlement weight separately.
@@ -211,7 +212,7 @@ Proposed lifecycle: `DRAFT → CONFIRMED → IN_PROGRESS → DELIVERED → SETTL
 - A rate always has a basis: per kg, quintal, tonne, bag, or flat lot.
 - `baseAmount = settlementQuantityInRateUnit × agreedRate`.
 - Preserve the original rate basis even if reports normalize it.
-- **Validate:** decimal precision and when rounding occurs—line, charge, tax, or invoice total.
+- Phase 1 rates are entered in whole rupees. **Validate:** derived-money rounding when kg/rate calculations produce paise and whether it occurs at line or final total.
 
 ### BR-006 — Quality and deductions
 
@@ -241,7 +242,7 @@ Every charge identifies:
 
 This prevents freight or brokerage from being subtracted twice or assigned to the wrong party.
 
-The first example deducts Kanta/weight charge, plastic sack charge, Hamali, and another amount from the overall supplier payable. We still need to determine whether each is merely borne by the seller, is separately owed to a service party, or is paid by the business and recoverable. Supplier payable and true inventory cost may differ.
+For Phase 1, Kanta/weight charge, plastic sack charge, Hamali, and other purchase-level amounts are combined into one seller-borne purchase deduction. It reduces supplier payable and creates no separate third-party liability. The paper breakdown may remain in the source document or remark. Revisit only if a real separate payment/liability is required.
 
 ### BR-008 — Brokerage
 
@@ -256,7 +257,7 @@ The first example deducts Kanta/weight charge, plastic sack charge, Hamali, and 
 
 - A transporter may have many vehicles and drivers; a vehicle/driver relationship can change over time.
 - Each load records freight terms: prepaid, to-pay, included, recoverable, or borne by a named party.
-- The confirmed V1 transport calculation is `transport rate × actual sale weight in quintal`; the responsible payer remains a per-sale input.
+- The confirmed Phase 1 transport calculation is `transport rate × actual sale weight in quintal`. The business bears it as a separate cost/payable; it does not reduce buyer receivable.
 - Transporter bill, advance, final payable, and payment are separate.
 - Transit shortage/damage is recorded explicitly with responsibility and settlement effect.
 
@@ -279,9 +280,9 @@ Use user-facing transaction types rather than asking users to choose abstract de
 - refund;
 - opening balance or approved adjustment.
 
-- A transaction may be split across multiple invoices.
-- An invoice may be settled by multiple transactions.
-- Excess or unassigned money remains an advance/on-account balance.
+- A Phase 1 sale receipt may be split between cash and one or more bank accounts of the selling firm.
+- Phase 1 payment/receipt portions link directly to one purchase or sale and cannot exceed its outstanding balance.
+- Advance/on-account allocation is deferred until validated with a real example.
 - Payment mode, account, reference, date, and evidence should be recorded.
 - Reversal is used for errors; the original is retained.
 
@@ -411,7 +412,9 @@ Do not define profit as cash received minus cash paid.
 - making full offline conflict resolution a V1 requirement without evidence;
 - allowing spreadsheet import directly into posted accounting records without validation and preview.
 
-## 8. Recommended V1 scope
+## 8. Candidate full-core scope retained from discovery
+
+This earlier broad recommendation is retained for history and longer-term planning. `PRD_PHASE_1.md` now controls the actual Phase 1 release scope and explicitly defers stock valuation, profit, generic expenses, and advance allocation.
 
 ### Foundation
 
@@ -608,21 +611,21 @@ These are design constraints, not legal or tax advice.
 7. When is a load stored versus directly sent from seller to buyer, and where does ownership change?
 8. Which weighment is authoritative for purchase, sale, stock, and transporter shortage?
 9. Which quality tests and deduction formulas are actually used?
-10. Who normally bears freight, brokerage, labour, mandi fee, bardana, and transit shortage?
+10. Beyond confirmed business-borne sale transport/brokerage and the combined seller-borne purchase deduction, which exceptional charges or shortages need structured treatment?
 11. Can accepted rate or quantity change after delivery? How is the dispute recorded?
 
 ### Money and accounting
 
-12. How are advances, partial payments, cash discounts, withheld amounts, and round-off handled?
-13. What do `DB` and `CR` mean on the existing paper money book from the business’s perspective?
-14. Which cash boxes and bank accounts exist per business entity? Are transfers between them recorded?
+12. How are partial payments, cash discounts, withheld amounts, and round-off handled? Advance allocation is deferred from Phase 1.
+13. Which additional DB/Cash Out and CR/Cash In reasons are used beyond seller payments and buyer receipts?
+14. Which Sai Traders and Guru Dev Traders bank accounts exist, what are their opening balances, and are transfers between them recorded?
 15. How are opening balances established and checked?
 16. What profit method is used today, and how are sale quantities matched to purchase cost?
-17. In Purchase Example 001, who receives each Kanta, sack, Hamali, and other deduction, and is it paid separately?
+17. Does any real purchase require a separate third-party liability instead of the confirmed combined seller-borne purchase deduction?
 
 ### Product operation
 
-18. Who will enter, approve, edit, and view data?
+18. Beyond Papa and Uncle as initial Main users across both firms, will any Operator users be added during Phase 1?
 19. What is the peak daily volume of deals, loads, payments, and printouts?
 20. What devices, printers, and network quality are available?
 21. Which reports are checked every day, week, month, and financial year?
@@ -630,7 +633,7 @@ These are design constraints, not legal or tax advice.
 23. How many deals, vehicle loads, purchase/sale lines, payments, and corrections occur on a peak day?
 24. What must match during parallel operation, who signs off the daily comparison, and how long must the system reconcile before becoming primary?
 25. If the father or uncle is unavailable, which tasks cannot currently continue and who should be trained as backup?
-26. Which five numbers must appear on the owner’s daily fingertip dashboard, and what is the trusted paper source for each?
+26. What is the trusted paper source for each selected primary KPI: Net Purchase Value, Gross Sale Value, Seller Outstanding, Buyer Outstanding, and Total Available Funds?
 
 ## 13. Decision gates before coding
 

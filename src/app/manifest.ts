@@ -1,15 +1,17 @@
 import type { MetadataRoute } from "next";
 
+import { projectMetadata } from "@/shared/project-metadata";
+import { uiTheme } from "@/shared/ui-theme";
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    background_color: "#f6f1e7",
-    description:
-      "Simple, explainable digital hisab for a family grain trading business.",
+    background_color: uiTheme.manifestBackgroundColor,
+    description: projectMetadata.description,
     display: "standalone",
     lang: "en-IN",
-    name: "HisabKitab",
-    short_name: "HisabKitab",
+    name: projectMetadata.name,
+    short_name: projectMetadata.name,
     start_url: "/",
-    theme_color: "#14532d",
+    theme_color: uiTheme.browserChromeColor,
   };
 }
