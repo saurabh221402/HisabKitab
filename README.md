@@ -2,7 +2,7 @@
 
 HisabKitab is a business operating system for a family-run grain trading business in India. The business buys agricultural commodities from farmers and local traders, moves and settles those goods, and sells them to firms and mills.
 
-The project is in **Phase 1 operator validation**. A strict TypeScript/Next.js modular monolith now includes a responsive live dashboard, invite-only Supabase SSR authentication for Papa and Uncle, reusable party/commodity masters, exact purchase and sale posting, buyer/seller balances, split receipts, a derived Daily Rokad, and reload-safe device drafts. Frontend, backend, pure domain logic, and database migrations remain behind explicit boundaries.
+The project is in **Phase 1 operator validation**. A strict TypeScript/Next.js modular monolith now includes a responsive live dashboard, invite-only Supabase SSR authentication for the two primary users, reusable party/commodity masters, exact purchase and sale posting, buyer/seller balances, split receipts, a derived Daily Rokad, and reload-safe device drafts. Frontend, backend, pure domain logic, and database migrations remain behind explicit boundaries.
 
 ## Current working documents
 
@@ -18,7 +18,7 @@ The project is in **Phase 1 operator validation**. A strict TypeScript/Next.js m
 
 ## Current next step
 
-Register the real operating parties and firm bank accounts, then run the canonical purchase and sale examples through the authenticated application with Papa and Uncle. Reconcile them with paper, then enter verified opening cash/bank balances before treating liquidity as official.
+Register the real operating parties and firm bank accounts, then run the canonical purchase and sale examples through the authenticated application with the primary users. Reconcile them with paper, then enter verified opening cash/bank balances before treating liquidity as official.
 
 ## Local development
 

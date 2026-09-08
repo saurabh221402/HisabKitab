@@ -6,7 +6,7 @@ Status: Accepted Phase 1 boundary; operational core and initial users activated,
 
 ## 1. V1 objective
 
-Build a simple digital companion for Papa and Uncle that answers:
+Build a simple digital companion for the two primary business users that answers:
 
 - From whom did we buy?
 - Under which business firm was it bought?
@@ -37,8 +37,8 @@ The UI should be simple; the stored data must remain reliable.
 
 Initial users:
 
-- Papa — active Main account
-- Uncle — active Main account
+- Mohan — active Main account
+- Second primary user — active Main account
 
 Authentication:
 
@@ -297,7 +297,7 @@ Deferred functionality must not block simple notes/remarks or later schema evolu
 4. Cash/bank book and current cash.
 5. Filtered dashboard and party tables.
 6. Attachments, audit, exports, and reversal behavior.
-7. Paper-plus-digital pilot with Papa and Uncle.
+7. Paper-plus-digital pilot with the primary users.
 
 Each slice must use real examples and reconcile before the next becomes authoritative.
 

@@ -44,7 +44,7 @@ export function FoundationPage() {
               <span className="text-brand block">Digital ki speed.</span>
             </h1>
             <p className="text-ink-muted mt-7 max-w-2xl text-lg leading-8 sm:text-xl">
-              {projectMetadata.description} Built around the way Papa and Uncle
+              {projectMetadata.description} Built around the way experienced business users
               already work—not around generic ERP screens.
             </p>
           </div>

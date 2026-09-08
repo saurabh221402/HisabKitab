@@ -20,10 +20,10 @@ Status: Working hypotheses; requires validation with the business owner and acco
 - Outbound trade: intra-state and interstate, including Bihar, Madhya Pradesh, Gujarat, and Maharashtra.
 - Fulfilment: both warehoused stock and direct seller-to-buyer dispatch.
 - Business role: V1 models principal trading—buy from farmers/traders, aggregate or transport, then sell to mills/larger firms. Brokers act as intermediaries in this flow.
-- Business names: Sai Traders and Guru Dev Traders are separate GST-registered firms associated with Papa and Uncle; future firms may be added.
+- Business names: Sai Traders and Guru Dev Traders are separate GST-registered firms operated by the two primary users; future firms may be added.
 - Current records: a significant cash segment is reportedly undocumented. The product will support recorded cash transactions but no off-books mode.
 - Reported scale: more than ₹50 crore annual revenue, around ₹50 lakh daily money movement, and around 100 metric tonnes of daily purchase/sale volume.
-- Current operating knowledge: core calculations and control are concentrated in the owner’s father and uncle.
+- Current operating knowledge: core calculations and control are concentrated in two experienced family operators.
 - Adoption requirement: retain paper during a confidence-building parallel run; do not force an immediate migration.
 
 ## 2. Market understanding
@@ -348,7 +348,7 @@ Do not define profit as cash received minus cash paid.
 
 ### BR-021 — Simplified V1 money language
 
-- Papa’s paper convention is `DB` for money given to a supplier/person and `CR` for money received from a buyer/person.
+- The business's paper convention is `DB` for money given to a supplier/person and `CR` for money received from a buyer/person.
 - The UI should show both the familiar label and plain meaning: `DB / Cash Out` and `CR / Cash In`.
 - Current cash is derived from opening cash plus cash in minus cash out.
 - Payments entered during purchase/sale must create or link the money-book movement automatically to prevent double entry.
@@ -625,14 +625,14 @@ These are design constraints, not legal or tax advice.
 
 ### Product operation
 
-18. Beyond Papa and Uncle as initial Main users across both firms, will any Operator users be added during Phase 1?
+18. Beyond the two primary Main users across both firms, will any Operator users be added during Phase 1?
 19. What is the peak daily volume of deals, loads, payments, and printouts?
 20. What devices, printers, and network quality are available?
 21. Which reports are checked every day, week, month, and financial year?
 22. How much historical paper/Excel data should be imported?
 23. How many deals, vehicle loads, purchase/sale lines, payments, and corrections occur on a peak day?
 24. What must match during parallel operation, who signs off the daily comparison, and how long must the system reconcile before becoming primary?
-25. If the father or uncle is unavailable, which tasks cannot currently continue and who should be trained as backup?
+25. If either primary user is unavailable, which tasks cannot currently continue and who should be trained as backup?
 26. What is the trusted paper source for each selected primary KPI: Net Purchase Value, Gross Sale Value, Seller Outstanding, Buyer Outstanding, and Total Available Funds?
 
 ## 13. Decision gates before coding

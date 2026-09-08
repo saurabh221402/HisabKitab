@@ -77,11 +77,11 @@ export function AppShell({ children, currentSection }: AppShellProps) {
         <div className="border-surface-raised/10 border-t p-4">
           <div className="bg-surface-raised/6 flex items-center gap-3 rounded-xl p-3">
             <span className="bg-accent grid size-9 place-items-center rounded-full text-xs font-bold">
-              SG
+              U
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">Main user</p>
-              <p className="text-surface-raised/45 text-xs">Papa / Uncle</p>
+              <p className="truncate text-sm font-medium">User</p>
+              <p className="text-surface-raised/45 text-xs">Main access</p>
             </div>
             <form action={logout}>
               <button

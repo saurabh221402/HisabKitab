@@ -8,7 +8,7 @@ Release name: Phase 1 — Operational Core
 
 ## 1. Product summary
 
-HisabKitab Phase 1 is a modern, responsive digital companion for Papa and Uncle to record daily grain purchases, sales, receipts, payments, and cash movement while they continue their familiar paper process during adoption.
+HisabKitab Phase 1 is a modern, responsive digital companion for the two primary business users to record daily grain purchases, sales, receipts, payments, and cash movement while they continue their familiar paper process during adoption.
 
 The release should answer, within seconds:
 
@@ -25,7 +25,7 @@ Phase 1 is intentionally narrower than a complete ERP. Its purpose is to establi
 
 - The business operates from Bhadohi district, Uttar Pradesh, and sells across India.
 - Reported scale is more than ₹50 crore annual revenue, around ₹50 lakh daily money movement, and around 100 metric tonnes of daily trade.
-- Most operating knowledge and calculations currently depend on Papa and Uncle.
+- Most operating knowledge and calculations currently depend on two primary operators.
 - Sai Traders and Guru Dev Traders are separate GST-registered business firms; more legitimate firms may be added later.
 - The business buys as principal from farmers and small traders, aggregates or transports commodities, and sells to mills and larger firms. Brokers mediate sales but are not the seller.
 - Internet connectivity may be unreliable, so unfinished work must survive temporary disconnection.
@@ -33,7 +33,7 @@ Phase 1 is intentionally narrower than a complete ERP. Its purpose is to establi
 
 ## 3. Phase 1 goals
 
-1. Provide a modern, uncluttered dashboard that Papa and Uncle can understand without accounting-software training.
+1. Provide a modern, uncluttered dashboard that the primary users can understand without accounting-software training.
 2. Maintain reusable records for business firms, parties, commodities, transporters, brokers, and vehicles.
 3. Record a complete purchase with weighment, commodity lines, deductions, payment, pending balance, remarks, and Kanta parchi.
 4. Record a complete sale with buyer, weight, rate, deductions, brokerage, transport, receipt, pending balance, remarks, and Kanta parchi.
@@ -74,7 +74,7 @@ Every user must have an individual username and password. Shared accounts are no
 | Set opening cash or reopen a closed day | No | Yes |
 | Manage users and firm access | No | Yes |
 
-Papa and Uncle may both view and operate Sai Traders and Guru Dev Traders. Both initial accounts hold the `Main` role. Public self-registration is disabled; a future Main-controlled workflow may add Operator accounts. A future Operator role can perform normal entry, while reversal, backdated posting, opening-balance changes, and reopening a closed day remain protected Main actions.
+Both primary users may view and operate Sai Traders and Guru Dev Traders. Both initial accounts hold the `Main` role. Public self-registration is disabled; a future Main-controlled workflow may add Operator accounts. A future Operator role can perform normal entry, while reversal, backdated posting, opening-balance changes, and reopening a closed day remain protected Main actions.
 
 ## 6. Product terminology
 
@@ -84,8 +84,8 @@ Papa and Uncle may both view and operate Sai Traders and Guru Dev Traders. Both 
 | Party | An external person or organization that may have one or more roles: seller, buyer, broker, or transporter |
 | Purchase / Buy | Commodity bought by one business firm from a seller |
 | Sale | Commodity sold by one business firm to a buyer |
-| DB / Cash Out | Papa's familiar label for money leaving cash; it is not presented as an accounting debit |
-| CR / Cash In | Papa's familiar label for money entering cash; it is not presented as an accounting credit |
+| DB / Cash Out | The business's familiar label for money leaving cash; it is not presented as an accounting debit |
+| CR / Cash In | The business's familiar label for money entering cash; it is not presented as an accounting credit |
 | Draft | Editable work that does not affect official balances |
 | Posted | Server-confirmed record that affects balances and reports |
 | Reversed | Posted record neutralized through a traceable correction; it is not deleted |
@@ -106,7 +106,7 @@ Phase 1 primary navigation:
 7. **Masters / मास्टर**
 8. **Settings / सेटिंग्स**
 
-The selected business firm and date context must remain visible. Papa and Uncle may select `Group Overview / All Firms` for consolidated operational visibility; entries and firm-specific ledgers are never posted or legally merged under that view.
+The selected business firm and date context must remain visible. Both primary users may select `Group Overview / All Firms` for consolidated operational visibility; entries and firm-specific ledgers are never posted or legally merged under that view.
 
 ## 8. Functional requirements
 
@@ -115,7 +115,7 @@ The selected business firm and date context must remain visible. Papa and Uncle 
 - Users sign in with an individual username and password.
 - Server-side authorization controls every protected read and write.
 - Each user is granted access to explicit business firms.
-- Papa and Uncle are initially authorized for both Sai Traders and Guru Dev Traders.
+- Both primary users are initially authorized for Sai Traders and Guru Dev Traders.
 - Every posted purchase, sale, and bank movement belongs to exactly one business firm. Shared operational-cash movements retain their source firm when applicable.
 - A missing or `Unassigned` firm is permitted only for a draft and blocks posting.
 - Switching firms updates all dashboard totals, lists, defaults, and search results consistently.
@@ -543,9 +543,9 @@ Selecting any seller/buyer outstanding KPI opens a table whose source transactio
 
 ## 14. Delivery sequence
 
-Implementation checkpoint on 8 September 2026: steps 2–4 and the first implementation of step 6 are complete in code and remote migrations. Daily Rokad, party positions, live dashboard read models, invite-only Papa/Uncle authentication, and reload-safe local draft recovery are implemented. Step 7 remains partial because daily close and exports depend on unresolved rules. Steps 1, 5, and 8 still require real use and paper reconciliation with Papa and Uncle.
+Implementation checkpoint on 8 September 2026: steps 2–4 and the first implementation of step 6 are complete in code and remote migrations. Daily Rokad, party positions, live dashboard read models, invite-only authentication for the two primary users, and reload-safe local draft recovery are implemented. Step 7 remains partial because daily close and exports depend on unresolved rules. Steps 1, 5, and 8 still require real use and paper reconciliation with the primary users.
 
-1. Validate this PRD, permissions, formulas, and terminology with the owner, Papa, and Uncle.
+1. Validate this PRD, permissions, formulas, and terminology with the owner and primary users.
 2. Define derived-money rounding, status transitions, posting matrix, and data model.
 3. Build authentication, firm context, and party/commodity masters.
 4. Build the canonical purchase-to-payment vertical slice, including Rokad and seller outstanding.
@@ -556,7 +556,7 @@ Implementation checkpoint on 8 September 2026: steps 2–4 and the first impleme
 
 ## 15. Phase 1 success criteria
 
-- Papa and Uncle can enter normal purchases, sales, and cash movements without assistance after brief training.
+- The primary users can enter normal purchases, sales, and cash movements without assistance after brief training.
 - The canonical purchase and sale examples reconcile exactly.
 - Every seller payable and buyer receivable is traceable to source transactions and payments.
 - No transaction is entered twice merely to produce Rokad, a ledger, or a dashboard.

@@ -28,7 +28,7 @@ HisabKitab should become the trusted operational record for the business without
 - Annual revenue/turnover is reported as more than ₹50 crore.
 - Daily money movement is reported at roughly ₹50 lakh.
 - Daily purchase and sale volume is reported at roughly 100 metric tonnes.
-- The calculation, memory, reconciliation, and operational control for this scale are currently handled mainly by two people: the owner’s father and uncle.
+- The calculation, memory, reconciliation, and operational control for this scale are currently handled mainly by two experienced family operators.
 - The current records remain predominantly paper-based.
 
 The primary risk is not database throughput. The current data volume is technically modest, but the financial value, operational dependency, and concentration of knowledge are high. HisabKitab exists to make the business explainable, searchable, measurable, and resilient without taking control away from the people who understand it today.
@@ -56,7 +56,7 @@ The business is based in **Bhadohi district, Uttar Pradesh** and sells to buyers
 
 The confirmed V1 business flow is principal trading: the business buys commodities from farmers and small traders, aggregates or transports them, and resells them to mills and larger firms. A broker may mediate the sale but does not change the business into a commission agent. Full commission-agent accounting is deferred unless a real transaction later establishes that requirement.
 
-**Sai Traders** and **Guru Dev Traders** are separate GST-registered firms associated with Papa and Uncle. Additional legitimate firms may be added in future. V1 therefore requires a business-firm master and a firm field on every finalized purchase, sale, cash/bank movement, and report. Firm separation, tax treatment, and any inter-firm activity must be reviewed with the business accountant/CA; HisabKitab will not use a dummy or off-books firm.
+**Sai Traders** and **Guru Dev Traders** are separate GST-registered firms operated by the two primary users. Additional legitimate firms may be added in future. V1 therefore requires a business-firm master and a firm field on every finalized purchase, sale, cash/bank movement, and report. Firm separation, tax treatment, and any inter-firm activity must be reviewed with the business accountant/CA; HisabKitab will not use a dummy or off-books firm.
 
 The current approximate transaction mix was described as:
 
@@ -74,19 +74,19 @@ The product should feel like a better register, not a generic ERP imposed on the
 
 The desired outcome is an accurate fingertip view of current cash flow, purchases, sales, stock, party accounts, exposure, margins, historical performance, and growth. Analytics are useful only when every number can be traced to trusted source transactions.
 
-Adoption must be evolutionary rather than abrupt. The father and uncle should continue their familiar paper workflow during an initial parallel-run period while HisabKitab acts as digital support. The system earns authority by repeatedly matching paper calculations and making retrieval, reconciliation, and analysis easier. It should become the primary record only after agreed reconciliation and confidence gates are met.
+Adoption must be evolutionary rather than abrupt. The primary users should continue their familiar paper workflow during an initial parallel-run period while HisabKitab acts as digital support. The system earns authority by repeatedly matching paper calculations and making retrieval, reconciliation, and analysis easier. It should become the primary record only after agreed reconciliation and confidence gates are met.
 
 ## 4. Initial users
 
 | User | Primary need |
 | --- | --- |
 | Owner | Current cash, stock, margin, exposure, receivables, and payables |
-| Father and uncle / current operators | Preserve familiar working methods while gaining fast calculation, search, reconciliation, and continuity |
+| Primary business users / current operators | Preserve familiar working methods while gaining fast calculation, search, reconciliation, and continuity |
 | Accountant / munshi | Rapid entry, correct calculations, reconciliation, ledgers, exports, and closing |
 | Operations staff | Lot, vehicle, weighment, dispatch, and document entry |
 | Auditor / CA | Traceable source documents, tax fields, immutable history, and exports |
 
-Phase 1 proposes Main and Operator permissions. Papa and Uncle may both operate both firms and may initially hold Main access; future user assignments remain to be confirmed.
+Phase 1 proposes Main and Operator permissions. Both primary users may operate both firms and may initially hold Main access; future user assignments remain to be confirmed.
 
 ## 5. Product principles
 
@@ -192,7 +192,7 @@ The initial ChatGPT discussion defined the problem as automation of a traditiona
 ### 7 September 2026 — scale and adoption strategy clarified
 
 - The business scale was recorded as more than ₹50 crore annual revenue, approximately ₹50 lakh daily money movement, and approximately 100 metric tonnes bought/sold per day.
-- Operational knowledge and paper calculations are concentrated mainly in the owner’s father and uncle.
+- Operational knowledge and paper calculations are concentrated mainly in two experienced family operators.
 - The core product purpose was refined: make accounts, cash flow, stock, analytics, history, and growth visible at the fingertips while reducing dependence on memory and two individuals.
 - A gradual adoption rule was accepted. Paper operations will continue during a parallel run; HisabKitab must first prove reconciliation and usefulness rather than forcing an abrupt cutover.
 - Operational dashboards and daily reconciliation were promoted as core outcomes, while predictive/advanced analytics remain deferred.
@@ -205,8 +205,8 @@ The initial ChatGPT discussion defined the problem as automation of a traditiona
 - Five warehouse locations were disclosed, but location-wise stock was explicitly deferred. V1 may use remarks instead.
 - Advanced weight discrepancy/shortage handling and detailed charge-accounting were deferred.
 - Bag weights were confirmed as variable (for example 50 kg, 60 kg, or 78 kg), so bag count and actual weight must be entered independently. Party GSTIN is optional.
-- The cash book was simplified to current available cash plus DB/Cash Out and CR/Cash In entries with amount, person, and remark. Papa defines DB as money given to suppliers and CR as money received from buyers.
-- Papa and Uncle are the initial direct users. Mixed-language, highly usable responsive screens and resilience to unreliable internet are required.
+- The cash book was simplified to current available cash plus DB/Cash Out and CR/Cash In entries with amount, person, and remark. The business defines DB as money given to suppliers and CR as money received from buyers.
+- Two primary family operators are the initial direct users. Mixed-language, highly usable responsive screens and resilience to unreliable internet are required.
 - Kanta parchi attachments are relevant on purchase and sale. Printer-specific support remains future scope.
 - The dashboard will start with filtered KPIs and buyer/seller tables; charts are future scope.
 - `docs/MVP_SCOPE.md` became the concise V1 boundary.
@@ -236,7 +236,7 @@ The initial ChatGPT discussion defined the problem as automation of a traditiona
 - `docs/PRD_PHASE_1.md` converts that direction into goals, non-goals, user flows, exact KPI meanings, UX standards, lifecycle/audit rules, acceptance scenarios, delivery order, and success measures.
 - Phase 1 analytics are defined as explainable KPIs and drill-down tables. Charts, stock valuation, and profit remain deferred until source records and costing rules are trustworthy.
 - Internal business firms and external parties are explicitly separated: a business firm owns each posted transaction, while a party may be a buyer, seller, broker, transporter, or several roles.
-- The PRD remains a draft until Papa and Uncle validate the operator workflow and the remaining example/configuration values are supplied.
+- The PRD remains a draft until the primary users validate the operator workflow and the remaining example/configuration values are supplied.
 - The owner added an engineering and visual-system requirement: follow strong coding practices and manage font, color, theme, spacing, surfaces, focus treatment, radii, and shadows centrally. The current foundation was refactored to semantic global design tokens so later screens inherit one consistent visual language.
 
 ### 8 September 2026 — Phase 1 financial and dashboard rules refined
@@ -245,7 +245,7 @@ The initial ChatGPT discussion defined the problem as automation of a traditiona
 - The generic sale-expense field was removed. Buyer deductions remain supported but require a reason such as moisture, quality, or another explicit explanation.
 - A sale receipt may be split between cash and bank accounts belonging to the selling firm; the canonical example still needs the exact amounts and selling firm.
 - Kanta, sack, Hamali, and other purchase-level amounts are combined into one seller-borne purchase deduction total in Phase 1. It reduces supplier payable without creating separate third-party liabilities.
-- Papa and Uncle may both operate Sai Traders and Guru Dev Traders. The firms remain legally separated in source records, while a Group Overview may consolidate operational visibility.
+- Both primary users may operate Sai Traders and Guru Dev Traders. The firms remain legally separated in source records, while a Group Overview may consolidate operational visibility.
 - Daily liquidity is shown as shared operational cash plus the recorded balances of Sai Traders and Guru Dev Traders bank accounts, with firm/account drill-down preserved.
 - On-account advance allocation was deferred. Backdated posting, reversal, opening-balance changes, and reopening a day require the Main role, a reason, and extra confirmation.
 - Phase 1 accepts whole-kilogram weight and whole-rupee rate inputs. Derived amounts retain exact paise; `kg × ₹/Qt` is calculated as integer paise, so this input policy requires no rounding.
@@ -272,23 +272,24 @@ The initial ChatGPT discussion defined the problem as automation of a traditiona
 
 ### 8 September 2026 — authenticated activation and browser QA
 
-- Separate `papa` and `uncle` Supabase accounts were created, confirmed, assigned the Main role, and granted access to both Sai Traders and Guru Dev Traders. Their rotated temporary credentials remain only in a git-ignored local handoff file.
+- Separate Supabase accounts for the two primary users were created, confirmed, assigned the Main role, and granted access to both Sai Traders and Guru Dev Traders. Their rotated temporary credentials remain only in a git-ignored local handoff file.
+- Product-facing account naming was standardized for a professional business UI: the primary profile displays as `Mohan`, the second profile displays as `User`, and existing login identifiers remain unchanged.
 - Public email self-registration was disabled in Supabase. The application is invite/admin-only and now provides an explicit sign-out action. The login redirect cache handoff was corrected and both accounts were verified from sign-out through the live dashboard.
-- Dashboard, Masters, Purchase, Sale, Rokad, and Parties were exercised under Papa's real authenticated RLS context on desktop and a 390 px mobile viewport. Both users reached their personalized dashboard without a runtime error.
+- Dashboard, Masters, Purchase, Sale, Rokad, and Parties were exercised under the primary account's real authenticated RLS context on desktop and a 390 px mobile viewport. Both users reached their personalized dashboard without a runtime error.
 - Purchase and sale forms now autosave changed drafts to the current device, restore them after reload, reject stale/corrupt references, and provide a discard action. Browser QA proved autosave, reload restoration, and cleanup for both forms without posting sample financial data.
 - Normal purchase and sale entries now start clean with today's business date. The two canonical calculation sets remain available only behind explicit “Load validated example” actions, preventing demo amounts from being mistaken for live business data.
 - All eight local/remote migrations remain aligned. Remote database lint and Performance Advisor report no errors or warnings. Security Advisor reports no errors and one Free-plan limitation: leaked-password screening requires Supabase Pro; strong generated temporary passwords are used meanwhile.
 
 ## 9. Current checkpoint
 
-We have a runnable, secured Phase 1 operational core backed by the remote Supabase project. Papa and Uncle's individual Main accounts are active and authenticated browser validation is complete. The remaining gate is controlled real/example posting and paper reconciliation; unvalidated opening balances, reversal UI, attachments, exports, and formal daily close remain deliberately incomplete.
+We have a runnable, secured Phase 1 operational core backed by the remote Supabase project. The two primary users' individual Main accounts are active and authenticated browser validation is complete. The remaining gate is controlled real/example posting and paper reconciliation; unvalidated opening balances, reversal UI, attachments, exports, and formal daily close remain deliberately incomplete.
 
 ```text
 Register real seller, buyer, broker, transporter, and bank accounts
   -> post and reconcile Purchase Example 001
   -> post and reconcile Sale Example 001 after missing values are supplied
   -> set verified cash/bank openings
-  -> validate dashboard, balances, and Rokad with Papa and Uncle
+  -> validate dashboard, balances, and Rokad with the primary users
 ```
 
 ## 10. How this document should be maintained

@@ -43,6 +43,7 @@ export async function createParty(
   }
 
   revalidatePath("/masters");
+  revalidatePath("/parties");
   revalidatePath("/purchases/new");
   return { error: null, success: `${parsedInput.data.name} registered.` };
 }

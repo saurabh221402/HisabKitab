@@ -17,7 +17,7 @@ export function LoginForm() {
           autoComplete="username"
           className="border-line bg-surface-raised text-ink focus:border-brand min-h-12 w-full rounded-xl border px-4 text-sm outline-none"
           name="username"
-          placeholder="papa"
+          placeholder="username"
           required
           type="text"
         />

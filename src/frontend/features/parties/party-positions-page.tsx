@@ -18,8 +18,8 @@ export function PartyPositionsPage({
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <p className="text-brand text-xs font-semibold tracking-[0.12em] uppercase">Party hisab</p>
-            <h1 className="text-ink mt-2 text-3xl font-semibold tracking-[-0.035em]">Buyer & seller balances</h1>
-            <p className="text-ink-muted mt-1.5 text-sm">Every amount is derived from posted source transactions.</p>
+            <h1 className="text-ink mt-2 text-3xl font-semibold tracking-[-0.035em]">Parties & balances</h1>
+            <p className="text-ink-muted mt-1.5 text-sm">All registered parties, with balances derived from posted source transactions.</p>
           </div>
           <Link
             className="bg-brand text-surface-raised inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold"
@@ -78,8 +78,8 @@ export function PartyPositionsPage({
           {report.positions.length === 0 ? (
             <div className="px-6 py-16 text-center">
               <UsersIcon className="text-ink-subtle mx-auto size-8" />
-              <p className="text-ink mt-4 font-semibold">No matching balance</p>
-              <p className="text-ink-subtle mt-1 text-sm">Posted purchase and sale balances will appear here.</p>
+              <p className="text-ink mt-4 font-semibold">No matching party</p>
+              <p className="text-ink-subtle mt-1 text-sm">Try changing the search or filters, or register a new party.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -107,7 +107,9 @@ export function PartyPositionsPage({
                       <td className="text-warning px-4 py-4 text-right font-semibold">{formatIndianCurrency(position.sellerOutstanding)}</td>
                       <td className="text-ink-muted px-4 py-4 text-right">{formatIndianCurrency(position.brokerageOutstanding)}</td>
                       <td className="text-ink-muted px-4 py-4 text-right">{formatIndianCurrency(position.transportOutstanding)}</td>
-                      <td className="text-ink-subtle px-5 py-4 text-right">{position.lastActivityDate}</td>
+                      <td className="text-ink-subtle px-5 py-4 text-right">
+                        {position.lastActivityDate ?? "No activity yet"}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

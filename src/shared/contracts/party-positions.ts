@@ -3,7 +3,7 @@ export type PartyPosition = Readonly<{
   buyerOutstanding: string;
   firmId: string;
   firmName: string;
-  lastActivityDate: string;
+  lastActivityDate: string | null;
   partyId: string;
   partyName: string;
   roles: readonly string[];

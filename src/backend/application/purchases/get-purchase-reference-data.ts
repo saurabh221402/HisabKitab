@@ -1,5 +1,6 @@
 import "server-only";
 
+import { toPartyReferenceOption } from "@/backend/application/masters/party-reference-option";
 import { createSupabaseServerClient } from "@/backend/infrastructure/supabase/server-client";
 import type { PurchaseReferenceData } from "@/shared/contracts/purchases";
 
@@ -55,8 +56,8 @@ export async function getPurchaseReferenceData(): Promise<PurchaseReferenceData>
       name: firm.name,
     })),
     sellers: (sellerRolesResult.data ?? []).flatMap((role) => {
-      const party = role.parties[0];
-      return party ? [{ id: String(party.id), name: party.name }] : [];
+      const party = toPartyReferenceOption(role.parties);
+      return party ? [party] : [];
     }),
   };
 }

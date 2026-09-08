@@ -1,5 +1,6 @@
 import "server-only";
 
+import { toPartyReferenceOption } from "@/backend/application/masters/party-reference-option";
 import { createSupabaseServerClient } from "@/backend/infrastructure/supabase/server-client";
 import type {
   SaleReferenceData,
@@ -46,11 +47,11 @@ export async function getSaleReferenceData(): Promise<SaleReferenceData> {
   const partiesByRole = new Map<string, SaleReferenceOption[]>();
 
   for (const role of rolesResult.data ?? []) {
-    const party = role.parties[0];
+    const party = toPartyReferenceOption(role.parties);
     if (!party) continue;
 
     const options = partiesByRole.get(role.role) ?? [];
-    options.push({ id: String(party.id), name: party.name });
+    options.push(party);
     partiesByRole.set(role.role, options);
   }
 
